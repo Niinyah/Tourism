@@ -25,10 +25,11 @@ public class TouristController {
         return new ResponseEntity<>(attractions, HttpStatus.OK);
 
     }
-    @GetMapping("/name")
-    public ResponseEntity<TouristAttraction>findAttractionsByName(@PathVariable String name) {
+
+    @GetMapping("{name}")
+    public ResponseEntity<TouristAttraction> findAttractionsByName(@PathVariable String name) {
         TouristAttraction touristAttraction = service.findAttractionsByName(name);
-        if(touristAttraction != null){
+        if (touristAttraction != null) {
             return new ResponseEntity<>(touristAttraction, HttpStatus.OK);
 
         }
@@ -38,10 +39,29 @@ public class TouristController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<TouristAttraction>addTouristAttraction(@RequestBody TouristAttraction touristAttraction){
+    public ResponseEntity<TouristAttraction> addTouristAttraction(@RequestBody TouristAttraction touristAttraction) {
         TouristAttraction touristAttraction1 = service.addTouristAttraction(touristAttraction);
         return new ResponseEntity<>(touristAttraction1, HttpStatus.CREATED);
     }
 
+    @PostMapping("/update")
+    public ResponseEntity<TouristAttraction> updateTouristAttraction(@RequestBody TouristAttraction touristAttraction) {
+        TouristAttraction touristAttraction1 = service.updateTouristAttraction(touristAttraction.getName(), touristAttraction.getDescription());
 
+        if (touristAttraction1 == null) {
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+        return new ResponseEntity<>(touristAttraction1, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/delete/{name}")
+    public ResponseEntity<TouristAttraction> deleteTouristAttraction(@PathVariable String name) {
+        TouristAttraction touristAttraction1 = service.deleteTouristAttraction(name);
+
+        if (touristAttraction1 == null) {
+            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+        }
+        return new ResponseEntity<>(touristAttraction1, HttpStatus.OK);
+
+    }
 }

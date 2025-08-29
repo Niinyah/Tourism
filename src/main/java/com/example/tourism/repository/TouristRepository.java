@@ -38,7 +38,7 @@ public class TouristRepository {
 
     public TouristAttraction findAttractionsByName(String name) {
         for (TouristAttraction touristAttraction : attractions) {
-            if (touristAttraction.equals(name)) {
+            if (touristAttraction.getName().equals(name)) {
                 return touristAttraction;
             }
         }
@@ -50,6 +50,27 @@ public class TouristRepository {
         attractions.add(addAttraction);
         return addAttraction;
     }
+
+    public TouristAttraction updateTouristAttraction(String name, String newDescription) {
+        for (TouristAttraction attraction : attractions) {
+            if (attraction.getName().equalsIgnoreCase(name)) {
+                attraction.setDescription(newDescription);
+                return attraction;
+            }
+        }
+        return null;
+    }
+
+    public TouristAttraction deleteTouristAttraction(String name) {
+        TouristAttraction found = findAttractionsByName(name);
+        if (found != null) {
+            attractions.remove(found);
+        }
+        return found;
+    }
+
+
+
 }
 
 
