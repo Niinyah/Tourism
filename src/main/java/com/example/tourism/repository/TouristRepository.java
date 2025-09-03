@@ -21,7 +21,7 @@ public class TouristRepository {
     public void populateAttractions() {
         TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue","Attraction");
         TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Amusementpark");
-        TouristAttraction touristAttraction3 = new TouristAttraction("Det Runde Tårn", "Tårn");
+        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn");
         TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant");
 
         attractions.add(touristAttraction1);
