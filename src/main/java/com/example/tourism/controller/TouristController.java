@@ -1,10 +1,12 @@
 package com.example.tourism.controller;
 
+import com.example.tourism.model.Tags;
 import com.example.tourism.model.TouristAttraction;
 import com.example.tourism.service.TouristService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +22,18 @@ public class TouristController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<TouristAttraction>> getAttractions() {
+    public String getAttractions(Model model) {
         List<TouristAttraction> attractions = service.getAttractions();
-        return new ResponseEntity<>(attractions, HttpStatus.OK);
+        model.addAttribute("attractions", attractions);
+        return "attractionList";
+
+    }
+
+    @GetMapping("/{name}/tags")
+    public String getTags( @PathVariable String name, Model model){
+        TouristAttraction touristAttraction = service.findAttractionsByName(name);
+        model.addAttribute("attraction", touristAttraction);
+        return "tags";
 
     }
 
