@@ -10,7 +10,6 @@ import java.util.List;
 public class TouristRepository {
     private List<TouristAttraction> attractions = new ArrayList<>();
 
-
     public TouristRepository(List<TouristAttraction> attractions){
         this.attractions = attractions;
         populateAttractions();
@@ -18,7 +17,6 @@ public class TouristRepository {
     public void setAttractions(List<TouristAttraction> attractions) {
         this.attractions = attractions;
     }
-
 
     public void populateAttractions() {
         TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue","Attraction");
