@@ -16,6 +16,8 @@ public class TouristAttraction {
 
     }
 
+    public TouristAttraction(){}
+
     public List<Tags> getTags() {
         return tags;
     }

@@ -6,7 +6,7 @@
   <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1 th:text="${attraction.name} tags">
+<h1 th:text="${attraction.name}">
 </h1>
 
 <table>
@@ -15,6 +15,8 @@
   </tr>
 </table>
 
-<button type="reset">Return</button>
+<form th:action="@{/attractions}">
+    <button type="submit">Return</button>
+</form>
 </body>
 </html>

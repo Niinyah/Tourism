@@ -49,10 +49,11 @@ public class TouristController {
 
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<TouristAttraction> addTouristAttraction(@RequestBody TouristAttraction touristAttraction) {
-        TouristAttraction touristAttraction1 = service.addTouristAttraction(touristAttraction);
-        return new ResponseEntity<>(touristAttraction1, HttpStatus.CREATED);
+    @GetMapping("/add")
+    public String addTouristAttraction(Model model) {
+        TouristAttraction touristAttraction = new TouristAttraction();
+        model.addAttribute("attraction", touristAttraction);
+        return "addTouristAttraction";
     }
 
     @PostMapping("/update")

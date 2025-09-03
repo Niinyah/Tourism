@@ -17,8 +17,9 @@
         <td th:text="${attraction.name}"></td>
         <td th:text="${attraction.description}"></td>
         <td>
-            <a th:href="@{/attractions/{name}(name=${attraction.name})/tags}">Tags</a>
-<!--            <input type="button" th:onclick="@{/attractions/${attraction.name}/tags}" th:value="Tags"/>-->
+            <form th:action="@{/attractions/{name}/tags(name=${attraction.name})}">
+                <button type="submit">Tags</button>
+            </form>
         </td>
     </tr>
 </table>
