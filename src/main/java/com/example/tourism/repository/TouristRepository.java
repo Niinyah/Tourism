@@ -1,5 +1,6 @@
 package com.example.tourism.repository;
 
+import com.example.tourism.model.Tags;
 import com.example.tourism.model.TouristAttraction;
 import org.springframework.stereotype.Repository;
 
@@ -10,19 +11,15 @@ import java.util.List;
 public class TouristRepository {
     private List<TouristAttraction> attractions = new ArrayList<>();
 
-    public TouristRepository(List<TouristAttraction> attractions){
-        this.attractions = attractions;
+    public TouristRepository(){
         populateAttractions();
-    }
-    public void setAttractions(List<TouristAttraction> attractions) {
-        this.attractions = attractions;
     }
 
     public void populateAttractions() {
-        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue","Attraction");
-        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Amusementpark");
-        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn");
-        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant");
+        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue","Attraction",List.of(Tags.NATURE), "Copenhagen");
+        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Amusementpark", List.of(Tags.ENTERTAINMENT), "Copenhagen");
+        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn", List.of(Tags.MUSEUM), "Copenhagen");
+        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant", List.of(Tags.RESTAURANT), "Copenhagen");
 
         attractions.add(touristAttraction1);
         attractions.add(touristAttraction2);
