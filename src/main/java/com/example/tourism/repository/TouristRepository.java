@@ -16,10 +16,10 @@ public class TouristRepository {
     }
 
     public void populateAttractions() {
-        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue","Attraction",List.of(Tags.NATURE), "Copenhagen");
-        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Amusementpark", List.of(Tags.ENTERTAINMENT), "Copenhagen");
-        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn", List.of(Tags.MUSEUM), "Copenhagen");
-        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant", List.of(Tags.RESTAURANT), "Copenhagen");
+        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue","Attraction",List.of(Tags.Nature), "Copenhagen");
+        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Amusementpark", List.of(Tags.Entertainment), "Copenhagen");
+        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn", List.of(Tags.Museam), "Copenhagen");
+        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant", List.of(Tags.Restaurant), "Copenhagen");
 
         attractions.add(touristAttraction1);
         attractions.add(touristAttraction2);

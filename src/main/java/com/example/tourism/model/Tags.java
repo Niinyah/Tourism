@@ -1,9 +1,10 @@
 package com.example.tourism.model;
 
 public enum Tags {
-    ENTERTAINMENT,
-    RESTAURANT,
-    NATURE,
-    MUSEUM,
+    Entertainment,
+    Restaurant,
+    Nature,
+    Museam,
+
 
 }
