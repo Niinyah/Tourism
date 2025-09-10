@@ -9,23 +9,23 @@
 <h1>Tilføj turistattraktion:</h1>
 <form action="#" th:action="@{/attractions/save}" th:object="${attraction}" method="post">
     <label>Navn:
-        <input type="text" th:field="*{name}"/>
+        <input th:required="required" type="text" th:field="*{name}"/>
     </label>
     <br/>
     <label>Beskrivelse:
-        <input type="text" th:field="*{description}"/>
+        <input th:required="required" type="text" th:field="*{description}"/>
     </label>
     <br/>
     <label>By:
-        <input type="text" th:field="*{city}"/>
+        <input th:required="required" type="text" th:field="*{city}"/>
     </label>
     <br/>
     <label>Kategori:</label>
     <br/>
 
     <div th:each="tag: ${tags}">
-        <label th:text="${tag.toString()} "></label>
-        <input th:value="${tag}" th:field="*{tags}" type="checkbox"/>
+        <label th:text="${tag.toString()}" th:for="${tag}"></label>
+        <input th:id="${tag}" th:value="${tag}" th:field="*{tags}" type="checkbox"/>
     </div>
 
 

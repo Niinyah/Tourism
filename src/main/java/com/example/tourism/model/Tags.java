@@ -6,5 +6,4 @@ public enum Tags {
     Natur,
     Museum,
 
-
 }

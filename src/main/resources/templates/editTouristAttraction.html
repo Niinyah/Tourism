@@ -8,16 +8,16 @@
 <body>
 <h1>Edit Tourist attractions:</h1>
 <form action="#" th:action="@{/attractions/update}" th:object="${attraction}" method="post">
-  <label>Navn
-    <input type="text" th:field="*{name}"/>
+  <label>Navn:
+    <input th:required="required" type="text" th:field="*{name}"/>
   </label>
   <br/>
-  <label>Beskrivelse
-    <input type="text" th:field="*{description}"/>
+  <label>Beskrivelse:
+    <input th:required="required" type="text" th:field="*{description}"/>
   </label>
   <br/>
-  <label>By
-    <input type="text" th:field="*{city}"/>
+  <label>By:
+    <input th:required="required" type="text" th:field="*{city}"/>
   </label>
   <br/>
   <label>Tags</label>
