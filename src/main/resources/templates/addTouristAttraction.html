@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-  <link th:href="@{/main.css}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Tilføj turistattraktion</title>
+    <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Add Touristattractions:</h1>
+<h1>Tilføj turistattraktion:</h1>
 <form action="#" th:action="@{/attractions/save}" th:object="${attraction}" method="post">
-  <label>Name</label>
-  <input type="text" th:field="*{name}">
-  <br>
-  <label>Description</label>
-  <input type="text" th:field="*{description}">
-  <br>
-  <label>City</label>
-  <input type="text" th:field="*{city}">
-  <br>
-  <label>Tags</label>
-  <br>
-    <label>
-      <input th:each="tag: ${attraction.tags}" th:value="tag" type="checkbox" th:checked="tag">
+    <label>Navn:
+        <input type="text" th:field="*{name}"/>
     </label>
+    <br/>
+    <label>Beskrivelse:
+        <input type="text" th:field="*{description}"/>
+    </label>
+    <br/>
+    <label>By:
+        <input type="text" th:field="*{city}"/>
+    </label>
+    <br/>
+    <label>Kategori:</label>
+    <br/>
+
+    <div th:each="tag: ${tags}">
+        <label th:text="${tag.toString()} "></label>
+        <input th:value="${tag}" th:field="*{tags}" type="checkbox"/>
+    </div>
+
+
+    <button type="submit">Tilføj</button>
+
 </form>
+    <form th:action="@{/attractions}">
+        <button type="submit">Tilbage</button>
+    </form>
 </body>
 </html>

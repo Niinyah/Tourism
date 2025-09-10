@@ -1,11 +1,12 @@
 package com.example.tourism.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TouristAttraction {
     private String name;
     private String description;
-    private List<Tags> tags;
+    private List<Tags> tags = new ArrayList<>();
     private String city;
 
     public TouristAttraction(String name, String description, List<Tags> tags, String city){
@@ -24,6 +25,14 @@ public class TouristAttraction {
 
     public void setTags(List<Tags> tags) {
         this.tags = tags;
+    }
+
+    public void addTag(Tags tag){
+        tags.add(tag);
+    }
+
+    public void removeTag(Tags tag){
+        tags.remove(tag);
     }
 
     public String getCity() {
