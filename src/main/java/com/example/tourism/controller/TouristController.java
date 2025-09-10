@@ -18,6 +18,7 @@ public class TouristController {
     private final TouristService service;
 
 
+
     public TouristController(TouristService touristService) {
         this.service = touristService;
     }
@@ -59,24 +60,60 @@ public class TouristController {
         return "addTouristAttraction";
     }
 
+    @PostMapping("/save")
+    public String saveTouristAttraction(@ModelAttribute TouristAttraction touristAttraction){
+        service.addTouristAttraction(touristAttraction);
+        return "redirect:/attractions";
+    }
+
+    @GetMapping("/{name}/edit")
+    public String editTouristAttraction(@PathVariable String name, Model model) {
+        TouristAttraction touristAttraction = service.findAttractionsByName(name);
+        model.addAttribute("attraction", touristAttraction);
+        List<Tags> tags = Arrays.stream(Tags.values()).toList();
+        model.addAttribute("tags",tags);
+        return "editTouristAttraction";
+
+    }
+
     @PostMapping("/update")
-    public ResponseEntity<TouristAttraction> updateTouristAttraction(@RequestBody TouristAttraction touristAttraction) {
-        TouristAttraction touristAttraction1 = service.updateTouristAttraction(touristAttraction.getName(), touristAttraction.getDescription());
-
-        if (touristAttraction1 == null) {
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-        }
-        return new ResponseEntity<>(touristAttraction1, HttpStatus.CREATED);
+    public String updateTouristAttraction(@ModelAttribute TouristAttraction touristAttraction){
+        service.updateTouristAttraction(touristAttraction);
+        return "redirect:/attractions";
     }
 
-    @PostMapping("/delete/{name}")
-    public ResponseEntity<TouristAttraction> deleteTouristAttraction(@PathVariable String name) {
-        TouristAttraction touristAttraction1 = service.deleteTouristAttraction(name);
+    @PostMapping("/{name}/delete")
+    public String deleteTouristAttraction(@PathVariable String name) {
+        TouristAttraction touristAttraction = service.deleteTouristAttraction(name);
 
-        if (touristAttraction1 == null) {
-            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-        }
-        return new ResponseEntity<>(touristAttraction1, HttpStatus.OK);
-
+        return "redirect:/attractions";
     }
+
+
+    ////Handle the form submission
+    //    @PostMapping("/register")
+    //    public String register(@ModelAttribute User user){
+    //        userService.addUser(user);
+    //        return "redirect:/user/users";
+
+//    @GetMapping("/update")
+//    public ResponseEntity<TouristAttraction> updateTouristAttraction(@RequestBody TouristAttraction touristAttraction) {
+//        TouristAttraction touristAttraction1 = service.updateTouristAttraction(touristAttraction.getName(), touristAttraction.getDescription());
+//
+//        if (touristAttraction1 == null) {
+//            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+//        }
+//        return new ResponseEntity<>(touristAttraction1, HttpStatus.CREATED);
+//    }
+//
+//    @PostMapping("/delete/{name}")
+//    public ResponseEntity<TouristAttraction> deleteTouristAttraction(@PathVariable String name) {
+//        TouristAttraction touristAttraction1 = service.deleteTouristAttraction(name);
+//
+//        if (touristAttraction1 == null) {
+//            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
+//        }
+//        return new ResponseEntity<>(touristAttraction1, HttpStatus.OK);
+//
+//    }
 }

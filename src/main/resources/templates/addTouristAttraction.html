@@ -2,25 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Tilføj turistattraktion</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Add Touristattractions:</h1>
+<h1>Tilføj turistattraktion:</h1>
 <form action="#" th:action="@{/attractions/save}" th:object="${attraction}" method="post">
-    <label>Name
+    <label>Navn:
         <input type="text" th:field="*{name}"/>
     </label>
     <br/>
-    <label>Description
+    <label>Beskrivelse:
         <input type="text" th:field="*{description}"/>
     </label>
     <br/>
-    <label>City
+    <label>By:
         <input type="text" th:field="*{city}"/>
     </label>
     <br/>
-    <label>Tags</label>
+    <label>Kategori:</label>
     <br/>
 
     <div th:each="tag: ${tags}">
@@ -28,8 +28,12 @@
         <input th:value="${tag}" th:field="*{tags}" type="checkbox"/>
     </div>
 
-    <button type="submit">Add</button>
+
+    <button type="submit">Tilføj</button>
 
 </form>
+    <form th:action="@{/attractions}">
+        <button type="submit">Tilbage</button>
+    </form>
 </body>
 </html>

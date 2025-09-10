@@ -11,15 +11,15 @@ import java.util.List;
 public class TouristRepository {
     private List<TouristAttraction> attractions = new ArrayList<>();
 
-    public TouristRepository(){
+    public TouristRepository() {
         populateAttractions();
     }
 
     public void populateAttractions() {
-        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue","Attraction",List.of(Tags.Nature), "Copenhagen");
-        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Amusementpark", List.of(Tags.Entertainment), "Copenhagen");
-        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn", List.of(Tags.Museam), "Copenhagen");
-        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant", List.of(Tags.Restaurant), "Copenhagen");
+        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue", "Attraktion", List.of(Tags.Natur), "København");
+        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Forlystelsespark", List.of(Tags.Underholdning), "København");
+        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn", List.of(Tags.Museum), "København");
+        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant", List.of(Tags.Restaurant), "København");
 
         attractions.add(touristAttraction1);
         attractions.add(touristAttraction2);
@@ -40,18 +40,19 @@ public class TouristRepository {
         return null;
     }
 
-    public TouristAttraction addTouristAttraction(TouristAttraction touristAttraction){
+    public TouristAttraction addTouristAttraction(TouristAttraction touristAttraction) {
         TouristAttraction addAttraction = touristAttraction;
         attractions.add(addAttraction);
         return addAttraction;
     }
 
-    public TouristAttraction updateTouristAttraction(String name, String newDescription) {
-        for (TouristAttraction attraction : attractions) {
-            if (attraction.getName().equalsIgnoreCase(name)) {
-                attraction.setDescription(newDescription);
-                return attraction;
+    public TouristAttraction updateTouristAttraction(TouristAttraction touristAttraction) {
+        for (int i = 0; i < attractions.size(); i++) {
+            if (attractions.get(i).getName().equalsIgnoreCase(touristAttraction.getName())) {
+                attractions.set(i, touristAttraction);
+                return touristAttraction;
             }
+
         }
         return null;
     }
@@ -63,9 +64,8 @@ public class TouristRepository {
         }
         return found;
     }
-
-
-
 }
+
+
 
 
