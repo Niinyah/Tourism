@@ -1,6 +1,5 @@
 package com.example.tourism.controller;
 
-import com.example.tourism.model.Tags;
 import com.example.tourism.model.TouristAttraction;
 import com.example.tourism.service.TouristService;
 import org.springframework.http.HttpStatus;

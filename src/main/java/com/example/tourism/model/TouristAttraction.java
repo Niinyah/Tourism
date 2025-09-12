@@ -22,24 +22,12 @@ public class TouristAttraction {
         return tags;
     }
 
-    public void setTags(List<Tags> tags) {
-        this.tags = tags;
-    }
-
     public String getCity() {
         return city;
     }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
