@@ -28,8 +28,8 @@ public class TouristService {
         return touristRepository.addTouristAttraction(touristAttraction);
     }
 
-    public TouristAttraction updateTouristAttraction(String name, String newDescription) {
-        return touristRepository.updateTouristAttraction(name, newDescription);
+    public TouristAttraction updateTouristAttraction(TouristAttraction touristAttraction) {
+        return touristRepository.updateTouristAttraction(touristAttraction);
     }
 
     public TouristAttraction deleteTouristAttraction(String name){

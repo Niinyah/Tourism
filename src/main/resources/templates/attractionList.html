@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Turistattraktioner</title>
     <link th:href="@{/main.css}" rel="stylesheet">
 </head>
 <body>
@@ -11,17 +11,30 @@
     <tr>
         <th>Navn</th>
         <th>Beskrivelse</th>
+        <th>By</th>
         <th></th>
     </tr>
     <tr th:each="attraction: ${attractions}">
         <td th:text="${attraction.name}"></td>
         <td th:text="${attraction.description}"></td>
+        <td th:text="${attraction.city}"></td>
         <td>
-            <form th:action="@{/attractions/{name}/tags(name=${attraction.name})}">
-                <button type="submit">Tags</button>
+            <form th:action="@{/attractions/{name}/tags(name=${attraction.name})}" style="display: inline" >
+                <button type="submit">Kategori</button>
             </form>
+            <form th:action="@{/attractions/{name}/edit(name=${attraction.name})}" style="display: inline">
+                <button type="submit">Rediger</button>
+            </form>
+            <form th:action="@{/attractions/{name}/delete(name=${attraction.name})}" method="post" style="display: inline">
+                <button type="submit">Slet</button>
+            </form>
+
+
         </td>
     </tr>
 </table>
+<form th:action="@{/attractions/add}">
+        <button type="submit">Tilføj en attraktion</button>
+</form>
 </body>
 </html>
