@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public class TouristRepository {
-    private List<TouristAttraction> attractions = new ArrayList<>();
+    private final List<TouristAttraction> attractions = new ArrayList<>();
 
     public TouristRepository() {
         populateAttractions();
@@ -40,10 +40,9 @@ public class TouristRepository {
         return null;
     }
 
-    public TouristAttraction addTouristAttraction(TouristAttraction touristAttraction) {
-        TouristAttraction addAttraction = touristAttraction;
-        attractions.add(addAttraction);
-        return addAttraction;
+    public TouristAttraction addTouristAttraction(TouristAttraction touristAttraction){
+        attractions.add(touristAttraction);
+        return touristAttraction;
     }
 
     public TouristAttraction updateTouristAttraction(TouristAttraction touristAttraction) {
@@ -64,8 +63,9 @@ public class TouristRepository {
         }
         return found;
     }
+
+
+
 }
-
-
 
 
