@@ -3,8 +3,6 @@ package com.example.tourism.controller;
 import com.example.tourism.model.Tags;
 import com.example.tourism.model.TouristAttraction;
 import com.example.tourism.service.TouristService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -76,32 +74,4 @@ public class TouristController {
         TouristAttraction touristAttraction = service.deleteTouristAttraction(name);
         return "redirect:/attractions";
     }
-
-
-    ////Handle the form submission
-    //    @PostMapping("/register")
-    //    public String register(@ModelAttribute User user){
-    //        userService.addUser(user);
-    //        return "redirect:/user/users";
-
-//    @GetMapping("/update")
-//    public ResponseEntity<TouristAttraction> updateTouristAttraction(@RequestBody TouristAttraction touristAttraction) {
-//        TouristAttraction touristAttraction1 = service.updateTouristAttraction(touristAttraction.getName(), touristAttraction.getDescription());
-//
-//        if (touristAttraction1 == null) {
-//            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-//        }
-//        return new ResponseEntity<>(touristAttraction1, HttpStatus.CREATED);
-//    }
-//
-//    @PostMapping("/delete/{name}")
-//    public ResponseEntity<TouristAttraction> deleteTouristAttraction(@PathVariable String name) {
-//        TouristAttraction touristAttraction1 = service.deleteTouristAttraction(name);
-//
-//        if (touristAttraction1 == null) {
-//            return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-//        }
-//        return new ResponseEntity<>(touristAttraction1, HttpStatus.OK);
-//
-//    }
 }
