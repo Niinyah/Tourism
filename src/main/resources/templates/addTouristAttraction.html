@@ -25,15 +25,17 @@
 
     <div th:each="tag: ${tags}">
         <label th:text="${tag.toString()}" th:for="${tag}"></label>
-        <input th:id="${tag}" th:value="${tag}" th:field="*{tags}" type="checkbox"/>
+        <label>
+            <input th:id="${tag}" th:value="${tag}" th:field="*{tags}" type="checkbox"/>
+        </label>
     </div>
 
 
     <button type="submit">Tilføj</button>
 
 </form>
-    <form th:action="@{/attractions}">
-        <button type="submit">Tilbage</button>
-    </form>
+<form th:action="@{/attractions}">
+    <button type="submit">Tilbage</button>
+</form>
 </body>
 </html>
