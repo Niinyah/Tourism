@@ -40,30 +40,25 @@ public class TouristRepository {
         return null;
     }
 
-    public TouristAttraction addTouristAttraction(TouristAttraction touristAttraction){
+    public void addTouristAttraction(TouristAttraction touristAttraction) {
         attractions.add(touristAttraction);
-        return touristAttraction;
     }
 
-    public TouristAttraction updateTouristAttraction(TouristAttraction touristAttraction) {
+    public void updateTouristAttraction(TouristAttraction touristAttraction) {
         for (int i = 0; i < attractions.size(); i++) {
             if (attractions.get(i).getName().equalsIgnoreCase(touristAttraction.getName())) {
                 attractions.set(i, touristAttraction);
-                return touristAttraction;
+                return;
             }
-
         }
-        return null;
     }
 
-    public TouristAttraction deleteTouristAttraction(String name) {
+    public void deleteTouristAttraction(String name) {
         TouristAttraction found = findAttractionsByName(name);
         if (found != null) {
             attractions.remove(found);
         }
-        return found;
     }
-
 
 
 }
