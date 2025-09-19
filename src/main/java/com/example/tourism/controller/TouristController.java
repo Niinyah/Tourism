@@ -25,6 +25,7 @@ public class TouristController {
     public String getAttractions(Model model) {
         List<TouristAttraction> attractions = service.getAttractions();
         model.addAttribute("attractions", attractions);
+        //noinspection SpringMVCViewInspection
         return "attractionList";
 
     }
@@ -45,6 +46,7 @@ public class TouristController {
         model.addAttribute("attraction", touristAttraction);
         List<Tags> tags = Arrays.stream(Tags.values()).toList();
         model.addAttribute("tags",tags);
+        //noinspection SpringMVCViewInspection
         return "addTouristAttraction";
     }
 
@@ -60,6 +62,7 @@ public class TouristController {
         model.addAttribute("attraction", touristAttraction);
         List<Tags> tags = Arrays.stream(Tags.values()).toList();
         model.addAttribute("tags",tags);
+        //noinspection SpringMVCViewInspection
         return "editTouristAttraction";
 
     }
