@@ -33,6 +33,7 @@ public class TouristController {
     public String getTags( @PathVariable String name, Model model){
         TouristAttraction touristAttraction = service.findAttractionsByName(name);
         model.addAttribute("attraction", touristAttraction);
+        //noinspection SpringMVCViewInspection
         return "tags";
 
     }
