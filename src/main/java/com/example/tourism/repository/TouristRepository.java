@@ -4,8 +4,12 @@ import com.example.tourism.model.Tags;
 import com.example.tourism.model.TouristAttraction;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,7 +31,7 @@ public class TouristRepository {
 
     public TouristRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        createTables();
+
     }
 
     public List<TouristAttraction> getAttractions() {
@@ -79,18 +83,22 @@ public class TouristRepository {
 
     public void addTouristAttraction(TouristAttraction touristAttraction) {
         String sql = "INSERT INTO touristAttractions (name, description, city) VALUES (?,?,?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(sql,
-                touristAttraction.getName(),
-                touristAttraction.getDescription(),
-                touristAttraction.getCity());
-
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, touristAttraction.getName());
+            ps.setString(2, touristAttraction.getDescription());
+            ps.setString(3, touristAttraction.getCity());
+            return ps;
+        }, keyHolder);
+        int attraction_id = keyHolder.getKey() != null ? keyHolder.getKey().intValue() : -1;
         List<Tags> tags = touristAttraction.getTags();
         for (Tags t : tags) {
             String sqlTags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?,?) ";
 
             jdbcTemplate.update(sqlTags,
-                    touristAttraction.getId(),
+                    attraction_id,
                     t.toString());
 
         }
@@ -111,28 +119,28 @@ public class TouristRepository {
         jdbcTemplate.update(SQL, ta.getId());
     }
 
-    public void createTables() {
-        jdbcTemplate.execute("DROP TABLE IF EXISTS touristAttractions");
-        jdbcTemplate.execute("DROP TABLE IF EXISTS attraction_tags");
-
-        jdbcTemplate.execute("""
-                  CREATE TABLE touristAttractions (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(150) NOT NULL,
-                    description VARCHAR(150) NOT NULL,
-                    city VARCHAR(150) NOT NULL
-                  )
-                """);
-
-        jdbcTemplate.execute("""
-                  CREATE TABLE attraction_tags (
-                    attraction_id INT NOT NULL,
-                    tag_name VARCHAR(150) NOT NULL,
-                    PRIMARY KEY (attraction_id, tag_name),
-                    FOREIGN KEY (attraction_id) REFERENCES tourist_attractions(id) ON DELETE CASCADE
-                  )
-                """);
-    }
+//    public void createTables() {
+////        jdbcTemplate.execute("DROP TABLE IF EXISTS touristAttractions");
+////        jdbcTemplate.execute("DROP TABLE IF EXISTS attraction_tags");
+//
+//        jdbcTemplate.execute("""
+//                  CREATE TABLE touristAttractions (
+//                    id INT AUTO_INCREMENT PRIMARY KEY,
+//                    name VARCHAR(150) NOT NULL,
+//                    description VARCHAR(150) NOT NULL,
+//                    city VARCHAR(150) NOT NULL
+//                  )
+//                """);
+//
+//        jdbcTemplate.execute("""
+//                  CREATE TABLE attraction_tags (
+//                    attraction_id INT NOT NULL,
+//                    tag_name VARCHAR(150) NOT NULL,
+//                    PRIMARY KEY (attraction_id, tag_name),
+//                    FOREIGN KEY (attraction_id) REFERENCES tourist_attractions(id) ON DELETE CASCADE
+//                  )
+//                """);
+//    }
 
 
 }
