@@ -2,36 +2,73 @@ package com.example.tourism.repository;
 
 import com.example.tourism.model.Tags;
 import com.example.tourism.model.TouristAttraction;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class TouristRepository {
-    private final List<TouristAttraction> attractions = new ArrayList<>();
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
 
-    public TouristRepository() {
-        populateAttractions();
-    }
+    @Value("${spring.datasource.username}")
+    private String username;
 
-    public void populateAttractions() {
-        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue", "Attraktion", List.of(Tags.Natur), "København");
-        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Forlystelsespark", List.of(Tags.Underholdning), "København");
-        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn", List.of(Tags.Museum), "København");
-        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant", List.of(Tags.Restaurant), "København");
+    @Value("${spring.datasource.password}")
+    private String password;
 
-        attractions.add(touristAttraction1);
-        attractions.add(touristAttraction2);
-        attractions.add(touristAttraction3);
-        attractions.add(touristAttraction4);
+    private final JdbcTemplate jdbcTemplate;
+
+
+    public TouristRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        createTables();
     }
 
     public List<TouristAttraction> getAttractions() {
-        return attractions;
+        final String sql = """
+                    SELECT
+                      ta.id          AS ta_id,
+                      ta.name        AS ta_name,
+                      ta.description AS ta_description,
+                      ta.city        AS ta_city,
+                      at.tag_name    AS tag_name
+                    FROM touristAttractions ta
+                    LEFT JOIN attraction_tags at ON at.attraction_id = ta.id
+                    ORDER BY ta.id
+                """;
+
+        return jdbcTemplate.query(sql, rs -> {
+            Map<Integer, TouristAttraction> byId = new LinkedHashMap<>();
+            while (rs.next()) {
+                int id = rs.getInt("ta_id");
+                TouristAttraction ta = byId.get(id);
+                if (ta == null) {
+                    ta = new TouristAttraction();
+                    ta.setId(id);
+                    ta.setName(rs.getString("ta_name"));
+                    ta.setDescription(rs.getString("ta_description"));
+                    ta.setCity(rs.getString("ta_city"));
+                    byId.put(id, ta);
+                }
+
+                String tagName = rs.getString("tag_name");
+                if (tagName != null) {
+                    ta.addTag(Tags.valueOf(tagName));
+
+                }
+            }
+            return new ArrayList<>(byId.values());
+        });
     }
 
     public TouristAttraction findAttractionsByName(String name) {
+        List<TouristAttraction> attractions = getAttractions();
         for (TouristAttraction touristAttraction : attractions) {
             if (touristAttraction.getName().equals(name)) {
                 return touristAttraction;
@@ -41,23 +78,60 @@ public class TouristRepository {
     }
 
     public void addTouristAttraction(TouristAttraction touristAttraction) {
-        attractions.add(touristAttraction);
+        String sql = "INSERT INTO touristAttractions (name, description, city) VALUES (?,?,?)";
+
+        jdbcTemplate.update(sql,
+                touristAttraction.getName(),
+                touristAttraction.getDescription(),
+                touristAttraction.getCity());
+
+        List<Tags> tags = touristAttraction.getTags();
+        for (Tags t : tags) {
+            String sqlTags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?,?) ";
+
+            jdbcTemplate.update(sqlTags,
+                    touristAttraction.getId(),
+                    t.toString());
+
+        }
     }
 
     public void updateTouristAttraction(TouristAttraction touristAttraction) {
-        for (int i = 0; i < attractions.size(); i++) {
-            if (attractions.get(i).getName().equalsIgnoreCase(touristAttraction.getName())) {
-                attractions.set(i, touristAttraction);
-                return;
-            }
-        }
+        String sql = "UPDATE touristAttractions SET name = ?, description = ?, city = ? WHERE id = ?";
+        jdbcTemplate.update(sql,
+                touristAttraction.getName(),
+                touristAttraction.getDescription(),
+                touristAttraction.getCity(),
+                touristAttraction.getId());
     }
 
     public void deleteTouristAttraction(String name) {
-        TouristAttraction found = findAttractionsByName(name);
-        if (found != null) {
-            attractions.remove(found);
-        }
+        TouristAttraction ta = findAttractionsByName(name);
+        String SQL = "DELETE FROM touristAttractions WHERE id = ?";
+        jdbcTemplate.update(SQL, ta.getId());
+    }
+
+    public void createTables() {
+        jdbcTemplate.execute("DROP TABLE IF EXISTS touristAttractions");
+        jdbcTemplate.execute("DROP TABLE IF EXISTS attraction_tags");
+
+        jdbcTemplate.execute("""
+                  CREATE TABLE touristAttractions (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(150) NOT NULL,
+                    description VARCHAR(150) NOT NULL,
+                    city VARCHAR(150) NOT NULL
+                  )
+                """);
+
+        jdbcTemplate.execute("""
+                  CREATE TABLE attraction_tags (
+                    attraction_id INT NOT NULL,
+                    tag_name VARCHAR(150) NOT NULL,
+                    PRIMARY KEY (attraction_id, tag_name),
+                    FOREIGN KEY (attraction_id) REFERENCES tourist_attractions(id) ON DELETE CASCADE
+                  )
+                """);
     }
 
 

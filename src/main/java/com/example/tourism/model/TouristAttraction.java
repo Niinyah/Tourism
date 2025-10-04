@@ -8,6 +8,8 @@ public class TouristAttraction {
     private String description;
     private List<Tags> tags = new ArrayList<>();
     private String city;
+    private int id;
+
 
     public TouristAttraction(String name, String description, List<Tags> tags, String city){
         this.name = name;
@@ -25,6 +27,14 @@ public class TouristAttraction {
 
     public void setTags(List<Tags> tags) {
         this.tags = tags;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
+    public int getId(){
+        return id;
     }
 
     public void addTag(Tags tag){
