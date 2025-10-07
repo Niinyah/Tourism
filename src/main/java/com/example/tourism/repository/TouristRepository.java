@@ -10,10 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class TouristRepository {
@@ -48,7 +45,7 @@ public class TouristRepository {
                 """;
 
         return jdbcTemplate.query(sql, rs -> {
-            Map<Integer, TouristAttraction> byId = new LinkedHashMap<>();
+            Map<Integer, TouristAttraction> byId = new HashMap<>();
             while (rs.next()) {
                 int id = rs.getInt("ta_id");
                 TouristAttraction ta = byId.get(id);
@@ -111,6 +108,22 @@ public class TouristRepository {
                 touristAttraction.getDescription(),
                 touristAttraction.getCity(),
                 touristAttraction.getId());
+
+        List<TouristAttraction> touristAttractions = getAttractions();
+        for (TouristAttraction ta : touristAttractions) {
+            if (ta.getId() == touristAttraction.getId()) {
+                List<Tags> oldTags = ta.getTags();
+                List<Tags> newTags = ta.getTags();
+                if (oldTags.size() < newTags.size()) {
+                    for (Tags t : oldTags) {
+                        for (Tags n : newTags)
+                        if (t.equals(n))
+                        String sql_tags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
+                        jdbcTemplate.update(sql_tags, )
+                    }
+                }
+            }
+        }
     }
 
     public void deleteTouristAttraction(String name) {
