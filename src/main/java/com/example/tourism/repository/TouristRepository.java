@@ -113,19 +113,15 @@ public class TouristRepository {
         for (TouristAttraction ta : touristAttractions) {
             if (ta.getId() == touristAttraction.getId()) {
                 List<Tags> oldTags = ta.getTags();
-                List<Tags> newTags = ta.getTags();
+                List<Tags> newTags = touristAttraction.getTags();
                 if (oldTags.size() < newTags.size()) {
-                    List<Tags> tagsToAdd = new ArrayList<>();
-                    for (Tags t : oldTags) {
-                        for (Tags n : newTags)
-                        if (t.equals(n)){
-
-                        }
-
+                    List<Tags> differences = new ArrayList<>(newTags);
+                    differences.removeAll(oldTags);
+                    for (Tags t : differences) {
+                        String sql_tags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
+                        jdbcTemplate.update(sql_tags,touristAttraction.getId(), t);
                     }
                 }
-                        String sql_tags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
-                        jdbcTemplate.update(sql_tags );
             }
         }
     }
