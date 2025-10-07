@@ -10,7 +10,7 @@ import java.util.List;
 public class TouristService {
     private final TouristRepository touristRepository;
 
-    public TouristService(TouristRepository touristRepository){
+    public TouristService(TouristRepository touristRepository) {
         this.touristRepository = touristRepository;
     }
 
@@ -19,21 +19,21 @@ public class TouristService {
         return touristRepository.getAttractions();
     }
 
-    public TouristAttraction findAttractionsByName(String name){
+    public TouristAttraction findAttractionsByName(String name) {
         return touristRepository.findAttractionsByName(name);
 
     }
 
-    public TouristAttraction addTouristAttraction(TouristAttraction touristAttraction){
-        return touristRepository.addTouristAttraction(touristAttraction);
+    public void addTouristAttraction(TouristAttraction touristAttraction) {
+        touristRepository.addTouristAttraction(touristAttraction);
     }
 
-    public TouristAttraction updateTouristAttraction(TouristAttraction touristAttraction) {
-        return touristRepository.updateTouristAttraction(touristAttraction);
+    public void updateTouristAttraction(TouristAttraction touristAttraction) {
+        touristRepository.updateTouristAttraction(touristAttraction);
     }
 
-    public TouristAttraction deleteTouristAttraction(String name){
-        return touristRepository.deleteTouristAttraction(name);
+    public void deleteTouristAttraction(String name) {
+        touristRepository.deleteTouristAttraction(name);
     }
 
 
