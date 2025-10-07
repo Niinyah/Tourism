@@ -115,13 +115,17 @@ public class TouristRepository {
                 List<Tags> oldTags = ta.getTags();
                 List<Tags> newTags = ta.getTags();
                 if (oldTags.size() < newTags.size()) {
+                    List<Tags> tagsToAdd = new ArrayList<>();
                     for (Tags t : oldTags) {
                         for (Tags n : newTags)
-                        if (t.equals(n))
-                        String sql_tags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
-                        jdbcTemplate.update(sql_tags, )
+                        if (t.equals(n)){
+
+                        }
+
                     }
                 }
+                        String sql_tags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
+                        jdbcTemplate.update(sql_tags );
             }
         }
     }
