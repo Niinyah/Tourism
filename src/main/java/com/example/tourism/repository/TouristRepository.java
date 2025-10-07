@@ -2,36 +2,75 @@ package com.example.tourism.repository;
 
 import com.example.tourism.model.Tags;
 import com.example.tourism.model.TouristAttraction;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.text.html.HTML;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.*;
 
 @Repository
 public class TouristRepository {
-    private final List<TouristAttraction> attractions = new ArrayList<>();
+    @Value("${spring.datasource.url}")
+    private String dbUrl;
 
-    public TouristRepository() {
-        populateAttractions();
-    }
+    @Value("${spring.datasource.username}")
+    private String username;
 
-    public void populateAttractions() {
-        TouristAttraction touristAttraction1 = new TouristAttraction("Den lille havfrue", "Attraktion", List.of(Tags.Natur), "København");
-        TouristAttraction touristAttraction2 = new TouristAttraction("Tivoli", "Forlystelsespark", List.of(Tags.Underholdning), "København");
-        TouristAttraction touristAttraction3 = new TouristAttraction("Rundetårn", "Tårn", List.of(Tags.Museum), "København");
-        TouristAttraction touristAttraction4 = new TouristAttraction("Noma", "Restaurant", List.of(Tags.Restaurant), "København");
+    @Value("${spring.datasource.password}")
+    private String password;
 
-        attractions.add(touristAttraction1);
-        attractions.add(touristAttraction2);
-        attractions.add(touristAttraction3);
-        attractions.add(touristAttraction4);
+    private final JdbcTemplate jdbcTemplate;
+
+
+    public TouristRepository(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+
     }
 
     public List<TouristAttraction> getAttractions() {
-        return attractions;
+        final String sql = """
+                    SELECT
+                      ta.id          AS ta_id,
+                      ta.name        AS ta_name,
+                      ta.description AS ta_description,
+                      ta.city        AS ta_city,
+                      at.tag_name    AS tag_name
+                    FROM touristAttractions ta
+                    LEFT JOIN attraction_tags at ON at.attraction_id = ta.id
+                    ORDER BY ta.id
+                """;
+
+        return jdbcTemplate.query(sql, rs -> {
+            Map<Integer, TouristAttraction> byId = new HashMap<>();
+            while (rs.next()) {
+                int id = rs.getInt("ta_id");
+                TouristAttraction ta = byId.get(id);
+                if (ta == null) {
+                    ta = new TouristAttraction();
+                    ta.setId(id);
+                    ta.setName(rs.getString("ta_name"));
+                    ta.setDescription(rs.getString("ta_description"));
+                    ta.setCity(rs.getString("ta_city"));
+                    byId.put(id, ta);
+                }
+
+                String tagName = rs.getString("tag_name");
+                if (tagName != null) {
+                    ta.addTag(Tags.valueOf(tagName));
+
+                }
+            }
+            return new ArrayList<>(byId.values());
+        });
     }
 
     public TouristAttraction findAttractionsByName(String name) {
+        List<TouristAttraction> attractions = getAttractions();
         for (TouristAttraction touristAttraction : attractions) {
             if (touristAttraction.getName().equals(name)) {
                 return touristAttraction;
@@ -41,25 +80,51 @@ public class TouristRepository {
     }
 
     public void addTouristAttraction(TouristAttraction touristAttraction) {
-        attractions.add(touristAttraction);
+        String sql = "INSERT INTO touristAttractions (name, description, city) VALUES (?,?,?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, touristAttraction.getName());
+            ps.setString(2, touristAttraction.getDescription());
+            ps.setString(3, touristAttraction.getCity());
+            return ps;
+        }, keyHolder);
+        int attraction_id = keyHolder.getKey() != null ? keyHolder.getKey().intValue() : -1;
+        List<Tags> tags = touristAttraction.getTags();
+        for (Tags t : tags) {
+            String sqlTags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?,?) ";
+
+            jdbcTemplate.update(sqlTags,
+                    attraction_id,
+                    t.toString());
+
+        }
     }
 
     public void updateTouristAttraction(TouristAttraction touristAttraction) {
-        for (int i = 0; i < attractions.size(); i++) {
-            if (attractions.get(i).getName().equalsIgnoreCase(touristAttraction.getName())) {
-                attractions.set(i, touristAttraction);
-                return;
-            }
+        String sql = "UPDATE touristAttractions SET name = ?, description = ?, city = ? WHERE id = ?";
+        jdbcTemplate.update(sql,
+                touristAttraction.getName(),
+                touristAttraction.getDescription(),
+                touristAttraction.getCity(),
+                touristAttraction.getId());
+
+        String sqlTagsDelete = "DELETE FROM attraction_tags WHERE attraction_id = ?";
+        jdbcTemplate.update(sqlTagsDelete, touristAttraction.getId());
+
+        List<Tags> tags = touristAttraction.getTags();
+        for (Tags t : tags) {
+            String sqlTagsToInsert = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
+            jdbcTemplate.update(sqlTagsToInsert, touristAttraction.getId(), t.toString());
         }
     }
 
     public void deleteTouristAttraction(String name) {
-        TouristAttraction found = findAttractionsByName(name);
-        if (found != null) {
-            attractions.remove(found);
-        }
+        TouristAttraction ta = findAttractionsByName(name);
+        String SQL = "DELETE FROM touristAttractions WHERE id = ?";
+        jdbcTemplate.update(SQL, ta.getId());
     }
-
 
 }
 
