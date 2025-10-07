@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.HTML;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.*;
@@ -109,20 +110,13 @@ public class TouristRepository {
                 touristAttraction.getCity(),
                 touristAttraction.getId());
 
-        List<TouristAttraction> touristAttractions = getAttractions();
-        for (TouristAttraction ta : touristAttractions) {
-            if (ta.getId() == touristAttraction.getId()) {
-                List<Tags> oldTags = ta.getTags();
-                List<Tags> newTags = touristAttraction.getTags();
-                if (oldTags.size() < newTags.size()) {
-                    List<Tags> differences = new ArrayList<>(newTags);
-                    differences.removeAll(oldTags);
-                    for (Tags t : differences) {
-                        String sql_tags = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
-                        jdbcTemplate.update(sql_tags,touristAttraction.getId(), t);
-                    }
-                }
-            }
+        String sqlTagsDelete = "DELETE FROM attraction_tags WHERE attraction_id = ?";
+        jdbcTemplate.update(sqlTagsDelete, touristAttraction.getId());
+
+        List<Tags> tags = touristAttraction.getTags();
+        for (Tags t : tags) {
+            String sqlTagsToInsert = "INSERT INTO attraction_tags (attraction_id, tag_name) VALUES (?, ?)";
+            jdbcTemplate.update(sqlTagsToInsert, touristAttraction.getId(), t.toString());
         }
     }
 
@@ -131,30 +125,6 @@ public class TouristRepository {
         String SQL = "DELETE FROM touristAttractions WHERE id = ?";
         jdbcTemplate.update(SQL, ta.getId());
     }
-
-//    public void createTables() {
-////        jdbcTemplate.execute("DROP TABLE IF EXISTS touristAttractions");
-////        jdbcTemplate.execute("DROP TABLE IF EXISTS attraction_tags");
-//
-//        jdbcTemplate.execute("""
-//                  CREATE TABLE touristAttractions (
-//                    id INT AUTO_INCREMENT PRIMARY KEY,
-//                    name VARCHAR(150) NOT NULL,
-//                    description VARCHAR(150) NOT NULL,
-//                    city VARCHAR(150) NOT NULL
-//                  )
-//                """);
-//
-//        jdbcTemplate.execute("""
-//                  CREATE TABLE attraction_tags (
-//                    attraction_id INT NOT NULL,
-//                    tag_name VARCHAR(150) NOT NULL,
-//                    PRIMARY KEY (attraction_id, tag_name),
-//                    FOREIGN KEY (attraction_id) REFERENCES tourist_attractions(id) ON DELETE CASCADE
-//                  )
-//                """);
-//    }
-
 
 }
 
