@@ -1,5 +1,10 @@
-DROP TABLE IF EXISTS touristAttractions CASCADE;
-DROP TABLE IF EXISTS attraction_tags CASCADE;
+
+SET REFERENTIAL_INTEGRITY FALSE;
+
+DROP TABLE IF EXISTS attraction_tags;
+DROP TABLE IF EXISTS touristAttractions;
+
+SET REFERENTIAL_INTEGRITY TRUE;
 
 CREATE TABLE touristAttractions (
                                     id INT AUTO_INCREMENT PRIMARY KEY,
