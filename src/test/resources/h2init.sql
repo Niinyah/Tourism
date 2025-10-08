@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS touristAttractions;
-DROP TABLE IF EXISTS attraction_tags;
+DROP TABLE IF EXISTS touristAttractions CASCADE;
+DROP TABLE IF EXISTS attraction_tags CASCADE;
 
 CREATE TABLE touristAttractions (
                                     id INT AUTO_INCREMENT PRIMARY KEY,
